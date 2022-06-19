@@ -37,8 +37,8 @@ class Waiting {
     }
 
 
-    push(user, dpi, isbm, nombre_autor, nombre_libro, categoria) {
-        let node = new Node_Waiting(user, dpi, isbm, nombre_autor, nombre_libro, categoria);
+    push(dpi, user, isbm, nombre_autor, nombre_libro, categoria) {
+        let node = new Node_Waiting(dpi, user, isbm, nombre_autor, nombre_libro, categoria);
         if (this.head === null) {
             this.head = node;
         } else if (this.head.list_next === null) {
@@ -56,13 +56,7 @@ class Waiting {
     display() {
         let current = this.head;
         while (current != null) {
-            console.log("Head: " + current.isbm);
-            let temp = current.stack_next;
-            while (temp != null) {
-                console.log(temp.user);
-                temp = temp.stack_next;
-            }
-            console.log("\n");
+            console.log("Book: " + current.isbm);
             current = current.list_next;
         }
     };
@@ -70,32 +64,33 @@ class Waiting {
     graph() { // Displays the waiting list
         let str = "";
         str = "digraph G{\nlabel=\" Cola de Espera \";\nsize=7; \nnode [shape=circle];\n rankdir=TB; \n";
-        console.log(isbm);
         if (this.head) {
             console.log("!")
             let current = this.head;
             let counter = 0;
             while (current) {
+
+                console.log(counter, current.isbm);
+                str += "\nnode" + counter;
+                str += '[label="Nombre: ' + current.user + "\\nLibro: " + current.nombre_libro + '"];\n';
+
+                if (current.list_next === null) {
+                    str += "node" + counter;
+                } else {
+                    str += "node" + counter + " -> node" + (counter + 1) + "[dir= \"both\" ];\n";
+                }
+                current = current.list_next;
+                counter++;
                 if (current === this.head && counter != 0) {
                     break;
                 }
-                str += "\nnode" + counter;
-                str += '[label="Nombre: ' + current.user + " Libro: " + current.nombre_libro + '"];\n';
-
-                str += "book" + current.isbm + books + '[label="Nombre: ' + current.nombre_libro + " Cantidad: " + books + '"];\n';
-                if (current.next === this.head) {
-                    str += "node" + counter;
-                } else {
-                    str += "node" + counter + " -> node" + (counter+1) + "[dir= \"both\" ];\n";
-                }
             }
-            current = current.list_next;
-            counter++;
+
         }
         str += '}';
-        console.log(str);
+        //console.log(str);
         d3.select("#graph3").graphviz().width(1000).height(650).renderDot(str);
     }
 }
 
-var wait = new Waiting();
+var wait1 = new Waiting();

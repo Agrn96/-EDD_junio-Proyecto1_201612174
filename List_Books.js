@@ -16,6 +16,7 @@ class Node_Libros {
 class List_Books {
     constructor() {
         this.head = null;
+        this.fin = null;
         this.size = 0;
     }
     // Libros
@@ -65,6 +66,23 @@ class List_Books {
             }
             console.log("text3");
             current = current.next;
+            if(current === this.head){
+                break;
+            }
+        }
+    }
+
+    search2(isbn){
+        let current = this.head;
+        while(current){
+            if(current.isbm == isbn){
+                current.cantidad--;
+                break;
+            }
+            current = current.next;
+            if(current === this.head){
+                break;
+            }
         }
     }
     // Print List
@@ -103,7 +121,7 @@ class List_Books {
             str += "rank=same;"
         }
         str += '}';
-        console.log(str);
+        //console.log(str);
         d3.select("#graph").graphviz().width(1000).height(650).renderDot(str);
     }
 }

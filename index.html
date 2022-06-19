@@ -126,7 +126,8 @@
                         <button id="showMD" type="submit" class="btn btn-outline-primary" onclick="mD.graph('#graph')">
                                 Show MD
                         </button>
-                        <button id="showMO" type="submit" class="btn btn-outline-primary" onclick="mO.graph_O('#graph')">
+                        <button id="showMO" type="submit" class="btn btn-outline-primary"
+                                onclick="mO.graph_O('#graph')">
                                 Show MO
                         </button>
                         <form id="formAutores">
@@ -147,14 +148,16 @@
                 <!-- Display the stack and the purchase option to the right side -->
                 <!-- Display the different matrix -->
                 <div id="displayBooks">
-                        <button id="showMD" type="submit" class="btn btn-outline-primary" onclick="mD.graph2('#graph2')">
+                        <button id="showMD" type="submit" class="btn btn-outline-primary"
+                                onclick="mD.graph2('#graph2')">
                                 Thriller
                         </button>
-                        <button id="showMO" type="submit" class="btn btn-outline-primary" onclick="mO.graph2_O('#graph2')">
+                        <button id="showMO" type="submit" class="btn btn-outline-primary"
+                                onclick="mO.graph2_O('#graph2')">
                                 Fantasy
                         </button>
                 </div>
-                <div id="graph2" class="bookbg" style="background-image: url('../images/img1.jpg')" ></div>
+                <div id="graph2" class="bookbg" style="background-image: url('../images/img1.jpg')"></div>
 
                 <div id="displayStack">
                         <input type="text" id="ISBN_Stack" value="Enter ISBN">
@@ -162,6 +165,7 @@
                         <button onclick="purchase()" value="Purchase Book">Purchase Book</button>
                 </div> <!-- Display the stacks -->
                 <div id="graph3"></div>
+                <div id="graph4"></div>
         </div>
         <script>
                 //Login
@@ -358,24 +362,36 @@
                         }
                 }
 
-                function showStack(){
-                        let temp=document.querySelector('#ISBN_Stack').value
+                function showStack() {
+                        let temp = document.querySelector('#ISBN_Stack').value
                         pila = new Stack();
                         let book = libros.search(temp);
-                        pila.push(book.isbm, book.nombre_Autor, book.nombre_Libro, book.cantidad, book.categoria);
-                        pila.graph(); 
+                        if (book != null) {
+                                pila.push(book.isbm, book.nombre_Autor, book.nombre_Libro, book.cantidad, book.categoria);
+                                pila.graph();
+                        }
                 }
 
-                function purchase(){
-                        let temp=document.querySelector('#ISBN_Stack').value
-                        console.log("xxxxxx");
+                function purchase() {
+                        let temp = document.querySelector('#ISBN_Stack').value
                         let book = libros.search(temp);
-                        console.log(book.isbm);
-                        console.log("xxxxxx");
-                        users.bought(userInfo.data, book.isbm, book.nombre_Libro, book.nombre_Autor);
-                        console.log("xxxxxx");
-                        users.graphBooks();
-                        
+                        if (book != null) {
+                                if (book.cantidad === 0) {
+                                        wait1.push(userInfo.data, userInfo.nombre_Usuario, book.isbm, book.nombre_Autor, book.nombre_Libro, book.categoria);
+                                        console.log("texxxxt");
+                                        wait1.graph();
+                                } else {
+                                        libros.search2(book.isbm);
+                                        users.bought(userInfo.data, book.isbm, book.nombre_Libro, book.nombre_Autor);
+                                        users.graphBooks();
+                                        top5.insert(userInfo.data, userInfo.nombre_Completo, userInfo.nombre_Usuario, userInfo.correo, userInfo.role, userInfo.contrasena, userInfo.telefono);
+                                        top5.increase(userInfo.data);
+                                        setTimeout(function () {
+                                                top5.graph();
+                                        }, (1 * 1000));
+                                }
+
+                        }
                 }
 
                 var userInfo;
@@ -386,10 +402,8 @@
         <script type="text/javascript" src="Matriz.js"></script>
         <script type="text/javascript" src="Stack.js"></script>
         <script type="text/javascript" src="List_Books.js"></script>
-
-        <script>
-
-        </script>
+        <script type="text/javascript" src="List_Waiting.js"></script>
+        <script type="text/javascript" src="List_Top5.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
                 integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
                 crossorigin="anonymous"></script>

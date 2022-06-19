@@ -175,7 +175,7 @@ class List_Users {
             str += "{" + rowinfo + "};\n";
         }
         str += '}';
-        console.log(str);
+        //console.log(str);
         d3.select("#graph3").graphviz().width(1000).height(650).renderDot(str);
     }
 
