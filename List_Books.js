@@ -54,7 +54,19 @@ class List_Books {
         }
         this.size++;
     }
-
+    //Search for a book
+    search(isbn){
+        let current = this.head;
+        while(current){
+            console.log("text1");
+            if(current.isbm == isbn){
+                console.log("text2");
+                return current;
+            }
+            console.log("text3");
+            current = current.next;
+        }
+    }
     // Print List
     printListData() {
         let current = this.head;
@@ -70,24 +82,16 @@ class List_Books {
     }
 
     graph() {
-        let str = "";
-        str = "digraph G{\nlabel=\" Usuarios \";\ngraph[size=\"15,7\"]; \nnode [shape=circle];\n rankdir=LR \n";
+        let str = "digraph G{\nlabel=\" Usuarios \";\ngraph[size=\"15,7\"]; \nnode [shape=circle];\n rankdir=LR \n";
         if (this.head) {
             let current = this.head;
             let counter = 0;
             while (current) {
-                str += "node" + counter;
-                str += '[label="';
-                str += current.isbm + "\\n" + current.nombre_Autor + "\\n" + current.nombre_Libro + "\\n" + current.cantidad + "\\n" + current.fila + "\\n" + current.columna + "\\n" + current.paginas + "\\n" + current.categoria;
-                str += '"];\n';
+                str += "node" + counter + '[label="' + current.isbm + "\\n" + current.nombre_Autor + "\\n" + current.nombre_Libro + "\\n" + current.cantidad + "\\n" + current.fila + "\\n" + current.columna + "\\n" + current.paginas + "\\n" + current.categoria + "\"];\n";
                 if (current === this.fin) {
-                    str += "node" + counter;
-                    str += ";\n";
+                    str += "node" + counter + ";\n";
                 } else if (current.next) {
-                    str += "node" + counter;
-                    str += "->";
-                    str += "node" + (counter + 1) + "[dir= \"both\" ]";
-                    str += ";\n";
+                    str += "node" + counter + "-> node" + (counter + 1) + "[dir= \"both\" ];\n";
                 }
                 current = current.next;
                 counter++;
@@ -99,27 +103,8 @@ class List_Books {
             str += "rank=same;"
         }
         str += '}';
+        console.log(str);
         d3.select("#graph").graphviz().width(1000).height(650).renderDot(str);
     }
 }
 var libros = new List_Books(); // Linked List to hold book
-
-
-function leerJson_Libros() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var json = JSON.parse(this.responseText);
-            for (let i = 0; i < json.length; i++) {
-                libros.insert(json[i].isbn, json[i].nombre_autor, json[i].nombre_libro, json[i].cantidad, json[i].fila, json[i].columna, json[i].paginas, json[i].categoria);
-            }
-        }
-    }
-    console.log("XX");
-    xhttp.open("GET", "libros.json", true);
-    xhttp.send();
-    setTimeout(function () {
-        libros.graph();
-        libros.printListData();
-    }, (3 * 1000));
-}

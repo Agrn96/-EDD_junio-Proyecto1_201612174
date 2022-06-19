@@ -147,14 +147,14 @@
                 <!-- Display the stack and the purchase option to the right side -->
                 <!-- Display the different matrix -->
                 <div id="displayBooks">
-                        <button id="showMD" type="submit" class="btn btn-outline-primary" onclick="mD.graph('#graph2')">
+                        <button id="showMD" type="submit" class="btn btn-outline-primary" onclick="mD.graph2('#graph2')">
                                 Thriller
                         </button>
-                        <button id="showMO" type="submit" class="btn btn-outline-primary" onclick="mO.graph_O('#graph2')">
+                        <button id="showMO" type="submit" class="btn btn-outline-primary" onclick="mO.graph2_O('#graph2')">
                                 Fantasy
                         </button>
                 </div>
-                <div id="graph2"></div>
+                <div id="graph2" class="bookbg" style="background-image: url('../images/img1.jpg')" ></div>
 
                 <div id="displayStack">
                         <input type="text" id="ISBN_Stack" value="Enter ISBN">
@@ -178,10 +178,11 @@
                 });
                 loginButton.addEventListener("click", (e) => { //Change API to regular JS
                         temp = users.login(loginNickname.value, loginPassword.value);
+                        userInfo = temp;
                         console.log("ghy", temp);
-                        if (users.login(loginNickname.value, loginPassword.value) === false) {
+                        if (temp === false) {
                                 console.log("Wrong Information Entered");
-                        } else if (users.login(loginNickname.value, loginPassword.value) == 'Usuario') { // Test function for swapping between pages
+                        } else if (temp.role == 'Usuario') { // Test function for swapping between pages
                                 console.log("Yes, You're In Pleb");
                                 page1.style.display = "none";
                                 page3.style.display = "";
@@ -250,8 +251,6 @@
                                 abb.graph();
                         }, (1 * 1000));
                         console.log("Teest");
-
-
                 }
 
                 form.addEventListener('submit', handleSubmit);
@@ -285,8 +284,6 @@
                                 updateMatrix();
                         }, (1 * 1000));
                         console.log("Teest");
-
-
                 }
 
                 form1.addEventListener('submit', handleSubmit1);
@@ -320,8 +317,6 @@
                                 users.graph();
                         }, (1 * 1000));
                         console.log("Teest");
-
-
                 }
 
                 form2.addEventListener('submit', handleSubmit2);
@@ -366,16 +361,24 @@
                 function showStack(){
                         let temp=document.querySelector('#ISBN_Stack').value
                         pila = new Stack();
-                        //let book = libros.search(temp);
-                        //pila.insert(book.isbm, book.nombre_Autor, book.nombre_Libro, book.cantidad, book.categoria);
-                        pila.graph2(temp); 
+                        let book = libros.search(temp);
+                        pila.push(book.isbm, book.nombre_Autor, book.nombre_Libro, book.cantidad, book.categoria);
+                        pila.graph(); 
                 }
 
                 function purchase(){
-                        let temp=document.getElementById('#ISBN_Stack')
-                        pila.graph2(temp.value);
+                        let temp=document.querySelector('#ISBN_Stack').value
+                        console.log("xxxxxx");
+                        let book = libros.search(temp);
+                        console.log(book.isbm);
+                        console.log("xxxxxx");
+                        users.bought(userInfo.data, book.isbm, book.nombre_Libro, book.nombre_Autor);
+                        console.log("xxxxxx");
+                        users.graphBooks();
+                        
                 }
 
+                var userInfo;
 
         </script>
         <script type="text/javascript" src="ABB.js"></script>

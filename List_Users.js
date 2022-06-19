@@ -2,6 +2,7 @@ class Node {
     constructor(data, nombre_Completo, nombre_Usuario, correo, role, contrasena, telefono, next = null, prev = null) {
         this.next = next;
         this.prev = prev;
+        this.purchase = null;
         this.data = data;
         this.nombre_Completo = nombre_Completo;
         this.nombre_Usuario = nombre_Usuario;
@@ -9,6 +10,16 @@ class Node {
         this.telefono = telefono;
         this.role = role;
         this.correo = correo;
+    }
+}
+
+class Node_Purchases {
+    constructor(user, isbn, nombre, autor, purchase = null) {
+        this.user = user;
+        this.isbm = isbn;
+        this.nombre = nombre;
+        this.autor = autor;
+        this.purchase = purchase;
     }
 }
 
@@ -54,31 +65,32 @@ class List_Users {
         this.size++;
     }
 
-    pop() {
-        if (this.fin == null) {
-            if (this.head == null) {
-                console.log("Pila Vacia");
-                return;
-            } else if (this.head) {
-                let temp = this.head.data;
-                this.clearList();
-                this.size--;
-                return temp;
+    bought(user, isbn, nombre, autor) {
+        let current = this.head;
+        let node = new Node_Purchases(user, isbn, nombre, autor);
+        let stop = false;
+        while (current) {
+            console.log("---", current.data, user);
+            if (current.data === user) {
+                if (current.purchase === null) {
+                    current.purchase = node;
+                } else {
+                    let temp = current.purchase;
+                    while (temp.purchase != null) {
+                        temp = temp.purchase;
+                    }
+                    temp.purchase = node;
+                }
+                break;
             }
-        } else if (this.head.next == this.head) {
-            let temp = this.head.data;
-            this.head = null;
-            this.size = 0;
-            return temp;
-        } else {
-            let temp = this.fin;
-            this.fin = this.fin.prev;
-            this.fin.next = this.head;
-            this.head.prev = this.fin;
-            this.size--;
-            return temp.data;
+            stop = true;
+            current = current.next;
+            if (current === this.head && stop === true) {
+                break;
+            }
         }
     }
+
     // Print list data
     printListData() {
         let current = this.head;
@@ -104,17 +116,11 @@ class List_Users {
                     break;
                 }
                 str += "node" + counter;
-                str += '[label="';
-                str += current.data + "\\n" + current.nombre_Completo + "\\n" + current.nombre_Usuario + "\n" + current.contrasena + "\n" + current.telefono;
-                str += '"];\n';
+                str += '[label="' + current.data + "\\n" + current.nombre_Completo + "\\n" + current.nombre_Usuario + "\n" + current.contrasena + "\n" + current.telefono + '"];\n';
                 if (current === this.fin) {
-                    str += "node" + counter;
-                    str += ";\n";
+                    str += "node" + counter + ";\n";
                 } else if (current.next) {
-                    str += "node" + counter;
-                    str += "->";
-                    str += "node" + (counter + 1) + "[dir= \"both\" ]";
-                    str += ";\n";
+                    str += "node" + counter + "-> node" + (counter + 1) + "[dir= \"both\" ];\n";
                 }
                 current = current.next;
                 counter++;
@@ -123,8 +129,54 @@ class List_Users {
             str += "rank=same;"
         }
         str += '}';
-        //console.log(str);
         d3.select("#graph").graphviz().width(1000).height(650).renderDot(str);
+    }
+
+    graphBooks() {
+        let str = "";
+        str = "digraph G{\nlabel=\" Usuarios \";\nsize=7; \nnode [shape=circle];\n rankdir=TB; \n";
+        if (this.head) {
+            let current = this.head;
+            let counter = 0;
+            let rowinfo = "rank=same;"
+            while (current) {
+                if (current === this.head && counter != 0) {
+                    break;
+                }
+                str += "node" + counter;
+                rowinfo += "node" + counter + ";";
+                str += '[label="' + current.data + "\\n" + current.nombre_Completo + "\\n" + current.nombre_Usuario + "\n" + current.contrasena + "\n" + current.telefono + '"];\n';
+                if (current.purchase != null) {
+                    let temp = current.purchase;
+                    let rand = 2;
+                    str += "book" + temp.user + "1" + '[label="' + temp.nombre +'"];\n';
+                    str += "node" + counter + " -> book" + temp.user + "1;\n";
+                    temp = temp.purchase;
+                    while (temp) {
+                        str += "book" + temp.user + rand + '[label="' + temp.nombre +'"];\n';
+                        //if(temp.purchase != null){
+                        str += "book" + temp.user + (rand - 1) + " -> book" + temp.user + rand + ";";
+                        //} else {
+
+                        //}
+                        rand++;
+                        temp = temp.purchase;
+                    }
+                }
+                if (current === this.fin) {
+                    str += "node" + counter + ";\n";
+                } else if (current.next) {
+                    str += "node" + counter + "-> node" + (counter + 1) + "[dir= \"both\" ];\n";
+                }
+                current = current.next;
+                counter++;
+            }
+            str += "node" + (counter - 1) + " -> " + "node0" + "[dir= \"both\" constraint=false];\n";
+            str += "{" + rowinfo + "};\n";
+        }
+        str += '}';
+        console.log(str);
+        d3.select("#graph3").graphviz().width(1000).height(650).renderDot(str);
     }
 
     login(user, pass) {
@@ -134,45 +186,22 @@ class List_Users {
             while (current != null) {
                 console.log(current.nombre_Usuario + " " + current.contrasena);
                 if (current == this.head && stop === true) {
-                    console.log("False1");
+                    console.log("Incorrect information");
                     return false;
                 }
-                console.log("gggg", current.nombre_Usuario, current.contrasena);
-                console.log("hhhh",user,pass);
                 if (current.nombre_Usuario == user && current.contrasena == pass) {
                     console.log("True", current.role);
-                    return current.role;
+                    return current;
                 }
                 stop = true;
                 current = current.next;
             }
-            console.log("False2");
-            return false;
         }
+        console.log("User Not Found");
         return false;
     }
 }
 
-var ll = new List_Users();
 var users = new List_Users(); // Linked List to hold users
 
 users.insert(2354168452525, "Wilfred Perez", "Wilfred", "Wilfred@gmail.com", "Administrador", "123", "+502 (123) 123-4567");
-users.printListData();
-function leerJson_Usuarios() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var json = JSON.parse(this.responseText);
-            for (let i = 0; i < json.length; i++) {
-                users.insert(json[i].dpi, json[i].nombre_completo, json[i].nombre_usuario, json[i].correo, json[i].rol, json[i].contrasenia, json[i].telefono);
-            }
-        }
-    }
-
-    xhttp.open("GET", "usuarios.json", true);
-    xhttp.send();
-    setTimeout(function () {
-        users.graph();
-    }, (5 * 1000));
-
-}

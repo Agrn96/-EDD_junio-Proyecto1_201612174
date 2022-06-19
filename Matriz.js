@@ -408,9 +408,40 @@ class MD {
         d3.select(path).graphviz().width(1000).height(650).renderDot(str);
     }
 
+    graph(path) {
+        let str = "";
+        str = "digraph G{\nlabel=\" MD \";\nsize=7; \nnode [shape=rectangle]; \n";
+        if (this.inicio) {
+            str += " ";
+            str += this.graficadora2(this.raiz);
+        }
+        str += '}';
+        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+    }
+    graph2(path) {
+        let str = "";
+        str = "digraph G{\nlabel=\" MD \";\ngraph[bgcolor=\"transparent\"];\nsize=7; \nnode [shape=rectangle]; \n";
+        if (this.inicio) {
+            str += " ";
+            str += this.graficadora2(this.raiz);
+        }
+        str += '}';
+        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+    }
+
     graph_O(path) {
         let str = "";
         str = "digraph G{\nlabel=\" MD \";\nsize=7; \nnode [shape=rectangle]; \n";
+        if (this.inicio) {
+            str += " ";
+            str += this.graficadora3(this.raiz);
+        }
+        str += '}';
+        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+    }
+    graph2_O(path) {
+        let str = "";
+        str = "digraph G{\nlabel=\" MD \";\ngraph[bgcolor=transparent];\nsize=7; \nnode [shape=rectangle]; \n";
         if (this.inicio) {
             str += " ";
             str += this.graficadora3(this.raiz);
