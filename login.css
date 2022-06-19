@@ -1,0 +1,50 @@
+.bg-image-vertical {
+    position: relative;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: auto 100%;
+}
+
+@media (min-width: 1025px) {
+    .h-custom-2 {
+        height: 100%;
+    }
+}
+
+.parent {
+    border: 1px solid black;
+    margin: 1rem;
+    padding: 2rem 2rem;
+    text-align: center;
+}
+
+.left {
+    padding: 1rem 1rem;
+    float: left;
+    background-color: blue;
+    width: 25%;
+    height: 500px;
+}
+
+.right {
+    padding: 1rem 1rem;
+    float: right;
+    background-color: red;
+    height: 500px;
+    width: 25%;
+}
+
+.center {
+    background-color: green;
+    height: 500px;
+    width: 50%;
+}
+
+.custom {
+    width: 100px !important;
+}
+
+body{
+    background-image: url("Gradient Minimal Stock HD5073315683.jpg");
+}
