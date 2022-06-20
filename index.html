@@ -156,16 +156,38 @@
                                 onclick="mO.graph2_O('#graph2')">
                                 Fantasy
                         </button>
+                        <button id="showAutores" type="submit" class="btn btn-outline-primary"
+                                onclick="abb.graph('#autores')">
+                                Autores
+                        </button>
+                        <button id="showLibros" type="submit" class="btn btn-outline-primary"
+                                onclick="libros.graph('#autores')">
+                                Libros_Lista
+                        </button>
+                        <button id="showLibros" type="submit" class="btn btn-outline-primary"
+                                onclick="libros.BBS()">
+                                BubbleSort
+                        </button>
+                        <button id="showLibros" type="submit" class="btn btn-outline-primary"
+                                onclick="QS_()">
+                                Quicksort
+                        </button>
+                        <input type="text" placeholder="Author Name" id="authorS">
+                        <button id="showAuthor" type="submit" class="btn btn-outline-primary"
+                                onclick="authorSearch()">
+                                Search Author
+                        </button>
                 </div>
                 <div id="graph2" class="bookbg" style="background-image: url('../images/img1.jpg')"></div>
 
                 <div id="displayStack">
-                        <input type="text" id="ISBN_Stack" value="Enter ISBN">
+                        <input type="text" id="ISBN_Stack" placeholder="Enter ISBN">
                         <button onclick="showStack()" value="Show Stack">Show Stack</button>
                         <button onclick="purchase()" value="Purchase Book">Purchase Book</button>
                 </div> <!-- Display the stacks -->
                 <div id="graph3"></div>
                 <div id="graph4"></div>
+                <div id="autores"></div>
         </div>
         <script>
                 //Login
@@ -183,7 +205,7 @@
                 loginButton.addEventListener("click", (e) => { //Change API to regular JS
                         temp = users.login(loginNickname.value, loginPassword.value);
                         userInfo = temp;
-                        console.log("ghy", temp);
+                        //console.log("ghy", temp);
                         if (temp === false) {
                                 console.log("Wrong Information Entered");
                         } else if (temp.role == 'Usuario') { // Test function for swapping between pages
@@ -240,21 +262,14 @@
                 }
 
                 function handleSubmit(event) {
-                        // Stop the form from reloading the page
                         event.preventDefault();
-                        // If there's no file, do nothing
                         if (!file.value.length) return;
-                        // Create a new FileReader() object
                         let reader = new FileReader();
-                        // Setup the callback event to run when the file is read
                         reader.onload = logFile;
-                        // Read the file
                         reader.readAsText(file.files[0]);
-                        console.log("Teest");
                         setTimeout(function () {
-                                abb.graph();
+                                abb.graph('#graph');
                         }, (1 * 1000));
-                        console.log("Teest");
                 }
 
                 form.addEventListener('submit', handleSubmit);
@@ -272,27 +287,22 @@
                 }
 
                 function handleSubmit1(event) {
-                        // Stop the form from reloading the page
                         event.preventDefault();
-                        // If there's no file, do nothing
                         if (!file1.value.length) return;
-                        // Create a new FileReader() object
                         let reader = new FileReader();
-                        // Setup the callback event to run when the file is read
                         reader.onload = logFile1;
-                        // Read the file
                         reader.readAsText(file1.files[0]);
-                        console.log("Teest");
                         setTimeout(function () {
-                                libros.graph();
+                                libros.graph("#graph");
                                 updateMatrix();
                         }, (1 * 1000));
-                        console.log("Teest");
                 }
 
                 form1.addEventListener('submit', handleSubmit1);
 
-
+                function QS_(){
+                        libros.graph2("#autores");
+                }
                 //Upload Files Usuarios
                 let form2 = document.querySelector('#formUsuarios');
                 let file2 = document.querySelector('#myfile3');
@@ -306,21 +316,14 @@
                 }
 
                 function handleSubmit2(event) {
-                        // Stop the form from reloading the page
                         event.preventDefault();
-                        // If there's no file, do nothing
                         if (!file2.value.length) return;
-                        // Create a new FileReader() object
                         let reader = new FileReader();
-                        // Setup the callback event to run when the file is read
                         reader.onload = logFile2;
-                        // Read the file
                         reader.readAsText(file2.files[0]);
-                        console.log("Teest");
                         setTimeout(function () {
                                 users.graph();
                         }, (1 * 1000));
-                        console.log("Teest");
                 }
 
                 form2.addEventListener('submit', handleSubmit2);
@@ -333,7 +336,6 @@
                 function addMatrix() {
                         leerJson_Libros()
                         setTimeout(function () {
-                                console.log("FRUITS");
                                 updateMatrix();
                         }, (1 * 1000));
                 }
@@ -347,13 +349,13 @@
                         let stop = false;
                         while (current) {
                                 if (current.categoria === "Thriller") {
-                                        console.log("yy", current.fila, current.columna, current.nombre_Libro);
+                                        //console.log("yy", current.fila, current.columna, current.nombre_Libro);
                                         mD.add_Node(current.fila, current.columna, current.nombre_Libro);
                                 } else {
-                                        console.log("xx", current.fila, current.columna, current.nombre_Libro);
+                                        //console.log("xx", current.fila, current.columna, current.nombre_Libro);
                                         mO.add_Node(current.fila, current.columna, current.nombre_Libro);
                                 }
-                                console.log(current.isbm + " " + current.nombre_Autor);
+                                //console.log(current.isbm + " " + current.nombre_Autor);
                                 current = current.next;
                                 stop = true;
                                 if (current === libros.head && stop === true) {
@@ -373,12 +375,11 @@
                 }
 
                 function purchase() {
-                        let temp = document.querySelector('#ISBN_Stack').value
+                        let temp = document.querySelector('#ISBN_Stack').value;
                         let book = libros.search(temp);
                         if (book != null) {
                                 if (book.cantidad === 0) {
                                         wait1.push(userInfo.data, userInfo.nombre_Usuario, book.isbm, book.nombre_Autor, book.nombre_Libro, book.categoria);
-                                        console.log("texxxxt");
                                         wait1.graph();
                                 } else {
                                         libros.search2(book.isbm);
@@ -393,7 +394,11 @@
 
                         }
                 }
-
+                function authorSearch(){
+                        let temp = document.querySelector('#authorS').value;
+                        let rand = abb.search(temp);
+                        abb.showAuthor(rand);
+                }
                 var userInfo;
 
         </script>

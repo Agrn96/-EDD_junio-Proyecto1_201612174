@@ -63,21 +63,19 @@ class Waiting {
 
     graph() { // Displays the waiting list
         let str = "";
-        str = "digraph G{\nlabel=\" Cola de Espera \";\nsize=7; \nnode [shape=circle];\n rankdir=TB; \n";
+        str = "digraph G{\nlabel=\" Cola de Espera \";\ngraph[size=\"10,8\"]; \nnode [shape=circle];\n rankdir=TB; \n";
         if (this.head) {
-            console.log("!")
             let current = this.head;
             let counter = 0;
             while (current) {
-
-                console.log(counter, current.isbm);
+                //console.log(counter, current.isbm);
                 str += "\nnode" + counter;
                 str += '[label="Nombre: ' + current.user + "\\nLibro: " + current.nombre_libro + '"];\n';
 
                 if (current.list_next === null) {
                     str += "node" + counter;
                 } else {
-                    str += "node" + counter + " -> node" + (counter + 1) + "[dir= \"both\" ];\n";
+                    str += "node" + counter + " -> node" + (counter + 1) + ";\n";
                 }
                 current = current.list_next;
                 counter++;
@@ -89,7 +87,7 @@ class Waiting {
         }
         str += '}';
         //console.log(str);
-        d3.select("#graph3").graphviz().width(1000).height(650).renderDot(str);
+        d3.select("#graph3").graphviz().width(1000).height(1000).renderDot(str);
     }
 }
 

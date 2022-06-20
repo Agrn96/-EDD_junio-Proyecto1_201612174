@@ -70,7 +70,7 @@ class List_Users {
         let node = new Node_Purchases(user, isbn, nombre, autor);
         let stop = false;
         while (current) {
-            console.log("---", current.data, user);
+            //console.log("---", current.data, user);
             if (current.data === user) {
                 if (current.purchase === null) {
                     current.purchase = node;
@@ -107,7 +107,7 @@ class List_Users {
 
     graph() {
         let str = "";
-        str = "digraph G{\nlabel=\" Usuarios \";\nsize=7; \nnode [shape=circle];\n rankdir=LR \n";
+        str = "digraph G{\nlabel=\" Usuarios \";\ngraph[size=\"10,8\"]; \nnode [shape=circle];\n rankdir=LR \n";
         if (this.head) {
             let current = this.head;
             let counter = 0;
@@ -125,8 +125,6 @@ class List_Users {
                 current = current.next;
                 counter++;
             }
-            str += "node" + (counter - 1) + " -> " + "node0" + "[dir= \"both\" constraint=false];\n";
-            str += "rank=same;"
         }
         str += '}';
         d3.select("#graph").graphviz().width(1000).height(650).renderDot(str);
@@ -134,7 +132,7 @@ class List_Users {
 
     graphBooks() {
         let str = "";
-        str = "digraph G{\nlabel=\" Usuarios \";\nsize=7; \nnode [shape=circle];\n rankdir=TB; \n";
+        str = "digraph G{\nlabel=\" Usuarios \";\ngraph[size=\"10,8\"]; \nnode [shape=circle];\n rankdir=TB; \n";
         if (this.head) {
             let current = this.head;
             let counter = 0;
@@ -154,11 +152,7 @@ class List_Users {
                     temp = temp.purchase;
                     while (temp) {
                         str += "book" + temp.user + rand + '[label="' + temp.nombre +'"];\n';
-                        //if(temp.purchase != null){
                         str += "book" + temp.user + (rand - 1) + " -> book" + temp.user + rand + ";";
-                        //} else {
-
-                        //}
                         rand++;
                         temp = temp.purchase;
                     }
@@ -166,17 +160,17 @@ class List_Users {
                 if (current === this.fin) {
                     str += "node" + counter + ";\n";
                 } else if (current.next) {
-                    str += "node" + counter + "-> node" + (counter + 1) + "[dir= \"both\" ];\n";
+                    str += "node" + counter + "-> node" + (counter + 1) + ";\n";
                 }
                 current = current.next;
                 counter++;
             }
-            str += "node" + (counter - 1) + " -> " + "node0" + "[dir= \"both\" constraint=false];\n";
+            str += "node" + (counter - 1) + " -> " + "node0" + "[dir= \"backward\" constraint=false];\n";
             str += "{" + rowinfo + "};\n";
         }
         str += '}';
         //console.log(str);
-        d3.select("#graph3").graphviz().width(1000).height(650).renderDot(str);
+        d3.select("#graph3").graphviz().width(1000).height(1000).renderDot(str);
     }
 
     login(user, pass) {
@@ -184,7 +178,7 @@ class List_Users {
             let current = this.head;
             stop = false;
             while (current != null) {
-                console.log(current.nombre_Usuario + " " + current.contrasena);
+                //console.log(current.nombre_Usuario + " " + current.contrasena);
                 if (current == this.head && stop === true) {
                     console.log("Incorrect information");
                     return false;

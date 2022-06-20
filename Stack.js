@@ -50,29 +50,26 @@ class Stack {
 
     };
 
+
     graph() { // Displays only one pila
         let str = "";
-        str = "digraph G{\nlabel=\" Stack \";\nsize=7; \nnode [shape=circle];\n rankdir=TB; \n";
+        str = "digraph G{\nlabel=\" Stack \";\nsize=7; \nnode [shape=Mrecord];\n rankdir=TB; \n";
         if (this.head) {
             let current = this.head;
             let books = 1;
             str += "node1";
-            str += '[label="ISBM: ' + current.isbm + " Nombre: " + current.nombre_libro + '"];\n';
+            str += '[shape=Mrecord label="{ISBM: ' + current.isbm + " Nombre: " + current.nombre_libro;
             let temp = current.stack_next;
             while (temp != null) {
-                str += "book" + books + '[label="Nombre: ' + current.nombre_libro + " Numero: " + books + '"];\n';
-                if (books === 1) {
-                    str += "node1 -> book" + books + "\n";
-                } else {
-                    str += "book" + (books - 1) + " -> book" + books + "\n";
-                }
+                str += " | '" + books;
                 temp = temp.stack_next;
                 books++;
             }
+            str += '}"];\n';
         }
         str += '}';
-        console.log(str);
-        d3.select("#graph3").graphviz().width(1000).height(650).renderDot(str);
+        //console.log(str);
+        d3.select("#graph3").graphviz().width(1000).height(1000).renderDot(str);
     }
 }
 

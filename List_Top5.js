@@ -134,7 +134,7 @@ class List_Top5 {
 
     graph() {
         let str = "";
-        str = "digraph G{\nlabel=\" Top 5 Users \";\nsize=7; \nnode [shape=circle];\n rankdir=LR \n";
+        str = "digraph G{\nlabel=\" Top 5 Users \";\ngraph[size=\"10,8\"]; \nnode [shape=circle];\n rankdir=LR \n";
         if (this.head) {
             let current = this.head;
             let counter = 0;
@@ -160,8 +160,8 @@ class List_Top5 {
             
         }
         str += '}';
-        console.log(str);
-        d3.select("#graph4").graphviz().width(1000).height(650).renderDot(str);
+        //console.log(str);
+        d3.select("#graph4").graphviz().width(1000).height(1000).renderDot(str);
     }
 }
 

@@ -56,31 +56,28 @@ class List_Books {
         this.size++;
     }
     //Search for a book
-    search(isbn){
+    search(isbn) {
         let current = this.head;
-        while(current){
-            console.log("text1");
-            if(current.isbm == isbn){
-                console.log("text2");
+        while (current) {
+            if (current.isbm == isbn) {
                 return current;
             }
-            console.log("text3");
             current = current.next;
-            if(current === this.head){
+            if (current === this.head) {
                 break;
             }
         }
     }
 
-    search2(isbn){
+    search2(isbn) {
         let current = this.head;
-        while(current){
-            if(current.isbm == isbn){
+        while (current) {
+            if (current.isbm == isbn) {
                 current.cantidad--;
                 break;
             }
             current = current.next;
-            if(current === this.head){
+            if (current === this.head) {
                 break;
             }
         }
@@ -99,8 +96,34 @@ class List_Books {
         }
     }
 
-    graph() {
-        let str = "digraph G{\nlabel=\" Usuarios \";\ngraph[size=\"15,7\"]; \nnode [shape=circle];\n rankdir=LR \n";
+    graph(path) {
+        let str = "digraph G{\nlabel=\" Libros \";\ngraph[size=\"10,8\"]; \nnode [shape=circle];\n rankdir=LR \n";
+        if (this.head) {
+            let current = this.head;
+            let counter = 0;
+            while (current) {
+                str += "node" + counter + '[label="' + current.isbm + "\\n" + current.nombre_Autor + "\\n" + current.nombre_Libro + "\\n" + current.cantidad + "\\n" + current.fila + "\\n" + current.columna + "\\n" + current.paginas + "\\n" + current.categoria + "\"];\n";
+                if (current === this.fin) {
+                    str += "node" + counter + ";\n";
+                } else if (current.next) {
+                    str += "node" + counter + "-> node" + (counter + 1) + ";\n";
+                }
+                current = current.next;
+                counter++;
+                if (current === this.head && counter != 0) {
+                    break;
+                }
+            }
+            str += "node" + (counter - 1) + " -> " + "node0" + "[dir= \"backward\" constraint=false];\n";
+            str += "rank=same;"
+        }
+        str += '}';
+        //console.log(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
+    }
+
+    graph2(path) {
+        let str = "digraph G{\nlabel=\" Libros \";\ngraph[size=\"10,8\"]; \nnode [shape=circle];\n rankdir=RL \n";
         if (this.head) {
             let current = this.head;
             let counter = 0;
@@ -122,7 +145,86 @@ class List_Books {
         }
         str += '}';
         //console.log(str);
-        d3.select("#graph").graphviz().width(1000).height(650).renderDot(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
+    }
+
+    lastNode(node) {
+        while (node.next != null)
+            node = node.next;
+        return null;
+    }
+
+    part(l, h) {
+        let x = h.data;
+        let i = l.prev;
+        for (let j = l; j != h; j = j.next) {
+            if (j.data <= x) {
+                i = (i == null) ? l : i.next;
+                let temp = i.data;
+                i.data = j.data;
+                j.data = temp;
+            }
+        }
+        i = (i == null) ? l : i.next;
+        let temp = i.data;
+        i.data = h.data;
+        h.data = temp;
+        return i;
+    }
+
+    _quickSort(l, h) {
+        if (h != null && l != h && l != h.next) {
+            let temp = partition(l, h);
+            _quickSort(l, temp.prev);
+            _quickSort(temp.next, h);
+        } else {
+            return;
+        }
+    }
+
+    BBS() { //ascend
+
+        let stop = false;
+        while (stop === false) {
+            stop = true;
+            let current = this.head;
+            while (current) {
+                if (current.isbm > current.next.isbm) {
+                    let node = new Node_Libros(current.isbm, current.nombre_Autor, current.nombre_Libro, current.cantidad, current.fila, current.columna, current.paginas, current.categoria);
+                    current.isbm = current.next.isbm;
+                    current.nombre_Autor = current.next.nombre_Autor;
+                    current.nombre_Libro = current.next.nombre_Libro;
+                    current.cantidad = current.next.cantidad;
+                    current.fila = current.next.fila;
+                    current.columna = current.next.columna;
+                    current.paginas = current.next.paginas;
+                    current.categoria = current.next.categoria;
+
+                    current.next.isbm = node.isbm;
+                    current.next.nombre_Autor = node.nombre_Autor;
+                    current.next.nombre_Libro = node.nombre_Libro;
+                    current.next.cantidad = node.cantidad;
+                    current.next.fila = node.fila;
+                    current.next.columna = node.columna;
+                    current.next.paginas = node.paginas;
+                    current.next.categoria = node.categoria;
+                    stop = false;
+                }
+                current = current.next;
+
+                if (current === this.fin) {
+                    break;
+                }
+            } 
+        }
+        this.graph("#autores");
+    }
+
+    QS() { //descend
+        let node = this.head;
+        let head = lastNode(node);
+        _quickSort(node, head);
+        this.graph2("#autores");
     }
 }
 var libros = new List_Books(); // Linked List to hold book

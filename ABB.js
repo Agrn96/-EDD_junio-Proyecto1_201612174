@@ -12,32 +12,32 @@ class Node_ABB {
 }
 
 class ABB {
-    constructor(){
+    constructor() {
         this.raiz = null;
         this.size = 0;
     }
 
-    insert(dpi, nombre_Autor, correo, telefono, direccion, biografia){
+    insert(dpi, nombre_Autor, correo, telefono, direccion, biografia) {
         let node = new Node_ABB(dpi, nombre_Autor, correo, telefono, direccion, biografia);
-        if(this.raiz === null){
+        if (this.raiz === null) {
             this.raiz = node;
         } else {
             let temp = this.raiz;
             let status = false;
-            while(temp && status === false){
-                if(temp.dpi === dpi){
+            while (temp && status === false) {
+                if (temp.dpi === dpi) {
                     status = true;
                     break;
                 }
-                if(nombre_Autor > temp.nombre_Autor){
-                    if(temp.right === null){
+                if (nombre_Autor > temp.nombre_Autor) {
+                    if (temp.right === null) {
                         temp.right = node;
                         status = true;
                     } else {
                         temp = temp.right;
                     }
-                } else if(nombre_Autor < temp.nombre_Autor){
-                    if(temp.left === null){
+                } else if (nombre_Autor < temp.nombre_Autor) {
+                    if (temp.left === null) {
                         temp.left = node;
                         status = true;
                     } else {
@@ -49,8 +49,8 @@ class ABB {
         }
     }
 
-    displayIO(temp = this.raiz, go){
-        if(temp === null){
+    displayIO(temp = this.raiz, go) {
+        if (temp === null) {
             return;
         }
         this.displayIO(temp.left, go);
@@ -58,30 +58,30 @@ class ABB {
         this.displayIO(temp.right, go);
     }
 
-    displayPreO(temp = this.raiz, go){
-        if(temp === null){
+    displayPreO(temp = this.raiz, go) {
+        if (temp === null) {
             return;
         }
         console.log(temp.nombre_Autor + " ");
-        this.displayPreO(temp.left, go);        
+        this.displayPreO(temp.left, go);
         this.displayPreO(temp.right, go);
     }
 
-    displayPostO(temp = this.raiz, go){
-        if(temp === null){
+    displayPostO(temp = this.raiz, go) {
+        if (temp === null) {
             return;
         }
-        this.displayPostO(temp.left, go);        
+        this.displayPostO(temp.left, go);
         this.displayPostO(temp.right, go);
         console.log(temp.nombre_Autor + " ");
     }
     graficadora(temp) { // modify temp.data to temp.dpi and adjust other values
         let cadena = "";
-        if(temp === null){
+        if (temp === null) {
             return cadena;
         }
         cadena = "nodo" + temp.dpi + " [label = \"" + temp.nombre_Autor + "\"]; \n"; // DPI: " + temp.dpi + "\\n 
-        
+
         if (temp.left != null) {//:C0
             cadena = cadena + this.graficadora(temp.left) + "nodo" + temp.dpi + " -> nodo" + temp.left.dpi + "\n";
         }
@@ -91,9 +91,26 @@ class ABB {
         return cadena;
     }
 
-    graph() {
+    search(nombre) {
+        let current = this.raiz;
+        while (current) {
+            
+            if (nombre == current.nombre_Autor) {
+                return current;
+            } else if (nombre > current.nombre_Autor) {
+                current = current.right;
+            } else {
+                current = current.left;
+            }
+            if(current === null){
+                return;
+            }
+        }
+    }
+
+    graph(path) {
         let str = "";
-        str = "digraph G{\nlabel=\" Autores \";\nsize=7; \n";
+        str = "digraph G{\nlabel=\" Autores \";\ngraph[size=\"10,8\"]; \n";
         if (this.raiz) {
             let current = this.raiz;
             let counter = 0;
@@ -101,10 +118,23 @@ class ABB {
         }
         str += '}';
         //console.log(str);
-        d3.select("#graph").graphviz().width(1000).height(650).renderDot(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
     }
 
-    
+    showAuthor(node){
+        let str = "";
+        str = "digraph G{\nlabel=\" Author \";\ngraph[size=\"10,8\"]; \nnode [shape=Mrecord];\n rankdir=TB; \n";
+        if (node) {
+            let current = node;
+            str += "node1";
+            str += '[shape=Mrecord label="{ISBM: ' + current.dpi + "|Nombre: " + current.nombre_Autor + "|Correo: " + current.correo + "|Telefono: " + current.telefono + "|Direccion: " + current.direccion + "|Biografia: " + current.biografia;
+            str += '}"];\n';
+        }
+        str += '}';
+        //console.log(str);
+        d3.select("#graph2").graphviz().width(1000).height(1000).renderDot(str);
+    }
+
 }
 
 var abb = new ABB();

@@ -247,7 +247,7 @@ class MD {
                 cadena += "a" + temp_.row_No + " -> x" + temp_.row_No + "y" + temp_.col_No + " -> a" + temp_.row_No + "[constraint=false]\n";
                 rowInfo += "x" + temp_.row_No + "y" + temp_.col_No + ";"; //data -> color
                 if (temp_.up == null) {
-                    console.log(temp_.data);
+                    //console.log(temp_.data);
                     cadena += "b" + temp_.col_No + " -> x" + temp_.row_No + "y" + temp_.col_No + " -> b" + temp_.col_No + "\n";
                 } else {
                     cadena += "x" + temp_.up.row_No + "y" + temp_.up.col_No + " -> x" + temp_.row_No + "y" + temp_.col_No + " -> x" + temp_.up.row_No + "y" + temp_.up.col_No + "\n";
@@ -311,7 +311,7 @@ class MD {
                 cadena += "a" + temp_.row_No + " -> x" + temp_.row_No + "y" + temp_.col_No + " -> a" + temp_.row_No + "[constraint=false]\n";
                 rowInfo += "x" + temp_.row_No + "y" + temp_.col_No + ";"; //data -> color
                 if (temp_.up == null) {
-                    console.log(temp_.data);
+                    //console.log(temp_.data);
                     cadena += "b" + temp_.col_No + " -> x" + temp_.row_No + "y" + temp_.col_No + " -> b" + temp_.col_No + "\n";
                 } else {
                     cadena += "x" + temp_.up.row_No + "y" + temp_.up.col_No + " -> x" + temp_.row_No + "y" + temp_.col_No + " -> x" + temp_.up.row_No + "y" + temp_.up.col_No + "\n";
@@ -399,62 +399,57 @@ class MD {
 
     graph(path) {
         let str = "";
-        str = "digraph G{\nlabel=\" MD \";\nsize=7; \nnode [shape=rectangle]; \n";
+        str = "digraph G{\nlabel=\" MD \";\ngraph[size=\"10,8\"]; \nnode [shape=rectangle]; \n";
         if (this.inicio) {
             str += " ";
             str += this.graficadora2(this.raiz);
         }
         str += '}';
-        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
     }
 
     graph(path) {
         let str = "";
-        str = "digraph G{\nlabel=\" MD \";\nsize=7; \nnode [shape=rectangle]; \n";
+        str = "digraph G{\nlabel=\" MD \";\ngraph[size=\"10,8\"]; \nnode [shape=rectangle]; \n";
         if (this.inicio) {
             str += " ";
             str += this.graficadora2(this.raiz);
         }
         str += '}';
-        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
     }
     graph2(path) {
         let str = "";
-        str = "digraph G{\nlabel=\" MD \";\ngraph[bgcolor=\"transparent\"];\nsize=7; \nnode [shape=rectangle]; \n";
+        str = "digraph G{\nlabel=\" MD \";\ngraph[bgcolor=\"transparent\"];\ngraph[size=\"10,8\"]; \nnode [shape=rectangle]; \n";
         if (this.inicio) {
             str += " ";
             str += this.graficadora2(this.raiz);
         }
         str += '}';
-        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
     }
 
     graph_O(path) {
         let str = "";
-        str = "digraph G{\nlabel=\" MD \";\nsize=7; \nnode [shape=rectangle]; \n";
+        str = "digraph G{\nlabel=\" MO \";\ngraph[size=\"10,8\"]; \nnode [shape=rectangle]; \n";
         if (this.inicio) {
             str += " ";
             str += this.graficadora3(this.raiz);
         }
         str += '}';
-        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
     }
     graph2_O(path) {
         let str = "";
-        str = "digraph G{\nlabel=\" MD \";\ngraph[bgcolor=transparent];\nsize=7; \nnode [shape=rectangle]; \n";
+        str = "digraph G{\nlabel=\" MO \";\ngraph[bgcolor=transparent];\ngraph[size=\"10,8\"]; \nnode [shape=rectangle]; \n";
         if (this.inicio) {
             str += " ";
             str += this.graficadora3(this.raiz);
         }
         str += '}';
-        d3.select(path).graphviz().width(1000).height(650).renderDot(str);
+        d3.select(path).graphviz().width(1000).height(1000).renderDot(str);
     }
 }
 
 var mD = new MD();
 var mO = new MD();
-
-mD.add_Node("MD JS");
-mD.add_Node(1, 1, 1672010107384);
-mD.add_Node(1, 2, 7813208731085);
-mD.add_Node(2, 1, 5926841674782);
